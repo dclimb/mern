@@ -1,11 +1,21 @@
 const express = require('express');
-const app = express();
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser')
+const passport = require('passport');
 
 const keys = require('./config/keys');
 
-const port = process.env.PORT || 3000;
+const app = express();
+app.use(bodyParser.urlencoded({estended:false}));
+app.use(bodyParser.json());
 
+
+
+app.use(passport.initialize());
+require('./config/passport')(passport);
+
+
+// TEST ROUTE
 
 app.get('/', (req, res, next)=>{
   res.send(keys.MONGO_URI)
@@ -22,6 +32,9 @@ mongoose.connect(keys.MONGO_URI, {},(error) =>{
 })
 
 
+
+
+
 //ROUTES
 
 const usersRoutes = require('./api/routes/users');
@@ -33,4 +46,5 @@ app.use('/profiles', profilesRoutes)
 app.use('/posts', postsRoutes)
 
 // START SERVER
+const port = process.env.PORT || 3000;
 app.listen(port, ()=> console.log('server working'));
