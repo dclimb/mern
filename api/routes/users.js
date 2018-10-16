@@ -6,7 +6,10 @@ const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys');
 const passport = require('passport');
 
+//REQUIRE VALIDATORS
 
+const validateSigninInput = require('../../validation/signin')
+const validateLoginInput = require('../../validation/login')
 
 
 
@@ -30,16 +33,21 @@ router.get('/', (req,res,next) => {
 //@access Public
 
 router.post('/signin', (req,res,next) => {
+  const {errors, isValid} = validateSigninInput(req.body);
+
+  if(!isValid){
+    return res.status(400).json(errors)
+  };
+
   User.find({email: req.body.email}, (err, data) =>{
     if (data.length > 0){
-      res.json({
-        message: 'This email already exists'
-      })
+      errors.email = 'This email already exists';
+      res.status(400).json(errors)
     } else {
       bcrypt.hash(req.body.password, 10, (err,hash) =>{
         if (err) {
           res.status(500).json({
-            message: 'User nor created',
+            message: 'User not created',
             error: err
           })
         } else {
@@ -50,14 +58,14 @@ router.post('/signin', (req,res,next) => {
               avatar: req.body.avatar,
           });
 
-          user.save((err, data) => {
+          user.save((err, newUser) => {
               if(err){
                 res.status(500).json({
                   message: 'failed to sign in',
                   error: err
                 })
               } else{
-                res.status(201).json(data)
+                res.status(201).json(newUser)
               }
           })
         }
@@ -73,14 +81,21 @@ router.post('/signin', (req,res,next) => {
 //@access Public
 
 router.post('/login', (req,res,next) => {
+
+  const {errors, isValid} = validateLoginInput(req.body);
+
+  if(!isValid) return res.status(400).json(errors);
+
   User.findOne({email: req.body.email}, (err, user) =>{
     if(user == null){
-      res.status(500).json({message: 'Email not found'})
+      errors.email = 'Email not found';
+      res.status(500).json(errors);
     } else {
       // return res.json(user)
       bcrypt.compare(req.body.password, user.password, (err, data) =>{
         if (!data) {
-          res.status(401).json({message: 'Incorrect password'})
+          errors.password = 'Incorrect password';
+          res.status(401).json(errors);
         } else {
           const payload = {
             id: user.id,
