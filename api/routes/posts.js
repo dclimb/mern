@@ -7,7 +7,7 @@ const Post = require('../models/Post');
 
 //REQUIRE VALIDATIONS
 const validatePostInput = require('../../validation/postValidation');
-
+const validateCommentInput = require('../../validation/commentValidation');
 //@route GET /posts
 //@desc test route
 //@access Public
@@ -156,6 +156,35 @@ router.delete('/:postId', passport.authenticate('jwt', {session: false}), (req,r
       .catch(err => res.status(404).json({error: 'not found'}))
 });
 
+
+
+
+
+
+//@route  -  POST /posts/comment/:commentId
+//@desc   -  post by :commentId parameter
+//@access -  Private
+
+router.post('/comment/:postId', passport.authenticate('jwt', {session: false}), (req, res) =>{
+  const { errors, isValid } = validateCommentInput(req.body);
+  if(!isValid) return res.status(200).json(errors);
+
+  Post.findById(req.params.postId)
+      .then( post => {
+
+        const newComment = {
+          user: req.user.id,
+          name: req.user.name,
+          avatar: req.user.avatar,
+          text: req.body.text
+        }
+        post.comments.unshift(newComment);
+        post.save((err, data) =>{
+          if(err) return res.status(400).json(err);
+          res.status(200).json(post);
+        })
+      })
+})
 
 
 

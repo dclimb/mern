@@ -8,7 +8,7 @@ module.exports = (value) => {
 
 
   if(Validator.isEmpty(value.text)){
-    errors.text = 'Text field is reqvxzvuest' + value.text + 'fajgf'
+    errors.text = 'Text field is request' + value.text
   }
 
   return {
