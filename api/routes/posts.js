@@ -161,7 +161,7 @@ router.delete('/:postId', passport.authenticate('jwt', {session: false}), (req,r
 
 
 
-//@route  -  POST /posts/comment/:commentId
+//@route  -  POST /posts/comment/:postId
 //@desc   -  post by :commentId parameter
 //@access -  Private
 
@@ -172,20 +172,61 @@ router.post('/comment/:postId', passport.authenticate('jwt', {session: false}), 
   Post.findById(req.params.postId)
       .then( post => {
 
+        //CREATE COMMENT
+
         const newComment = {
           user: req.user.id,
           name: req.user.name,
           avatar: req.user.avatar,
           text: req.body.text
         }
+
+        //ADD COMMENT AND SAVE
+
         post.comments.unshift(newComment);
         post.save((err, data) =>{
-          if(err) return res.status(400).json(err);
+          if(err) return res.status(404).json(err);
           res.status(200).json(post);
         })
       })
 })
 
 
+
+
+
+
+//@route  -  DELETE /posts/comment/:postId/:commentId
+//@desc   -  delete by :commentId parameter
+//@access -  Private
+
+router.delete('/comment/:postId/:commentId', passport.authenticate('jwt', {session: false}), (req, res, next) =>{
+
+  Post.findById(req.params.postId)
+      .then( post => {
+        //CECK IF THE COMMENT EXISTS
+
+        if( post.comments.map( item => item.id).indexOf(req.params.commentId) < 0){
+          return res.status(404).json({message: 'Comment not found!!!!!!!!'})
+        }
+
+        //CHECK THE ID MATCH USER <=> COMMENT.USER
+
+        if( post.comments.filter( it => it.id.toString() == req.params.commentId)[0].user == req.user.id
+          || post.user.toString() == req.user.id){
+              const commentIndex = post.comments.map( item => item._id).indexOf(req.params.commentId);
+              post.comments.splice( commentIndex, 1)
+              post.save((err, data) => {
+                if(err) return res.status(500).json(err);
+                return res.status(200).json({message: 'comment DELETED!'});
+                next();
+          })
+        } else {
+          return res.status(401).json({message: 'NOT authorized'});
+        }
+
+      })
+      .catch(err => res.status(400).json({message:'invent'}))
+})
 
 module.exports = router;
