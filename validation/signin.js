@@ -26,15 +26,15 @@ module.exports = function validateSigninInput (data) {
   }
 
   if(!Validator.isLength(data.password, {min: 6, max: 30})) {
-    errors.Password = 'Password must be between 6 and 30 characters'
+    errors.password = 'Password must be between 6 and 30 characters'
   }
 
   if(Validator.isEmpty(data.password)) {
-    errors.Password = 'Password field is required'
+    errors.password = 'Password field is required'
   }
 
   if(Validator.isEmpty(data.password2)) {
-    errors.Password2 = 'Password confirmation field is required'
+    errors.password2 = 'Password confirmation field is required'
   }
 
   if(!Validator.equals(data.password, data.password2)){
