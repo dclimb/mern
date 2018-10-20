@@ -1,6 +1,9 @@
 import React from 'react';
-import axios from 'axios';
+import PropTypes from 'prop-types'
 import classnames from 'classnames';
+import {connect} from 'react-redux';
+import {withRouter} from 'react-router-dom';
+import {registerUser} from '../../actions/authActions'
 
 class Signin extends React.Component {
 
@@ -17,6 +20,12 @@ class Signin extends React.Component {
     this.onSubmit =  this.onSubmit.bind(this);
   }
 
+  componentWillReceiveProps(newProps){
+    if (newProps.errors) {
+      this.setState({errors: newProps.errors})
+    }
+  }
+
   onChange(e){
     this.setState({[e.target.name]: e.target.value})
   }
@@ -30,21 +39,14 @@ class Signin extends React.Component {
       password: this.state.password,
       password2: this.state.password2,
     }
-
-    axios.post('/users/signin', newUser)
-         .then(res => console.log(res.data))
-         .catch(err =>{
-           console.log(err.response.data);
-           this.setState({errors: err.response.data})
-         }
-
-         )
+    console.log(this.props);
+    this.props.registerUser(newUser, this.props.history)
   }
-
 
   render () {
 
     const {errors} = this.state;
+    const {user} = this.props.auth;
 
     return(
       <div className="register">
@@ -114,4 +116,12 @@ class Signin extends React.Component {
   }
 }
 
-export default Signin;
+Signin.propTypes= {
+  registerUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+}
+const mapStateToProps = (state) =>({
+  auth: state.auth,
+  errors: state.errors
+})
+export default connect(mapStateToProps, {registerUser})(withRouter(Signin));
