@@ -2,47 +2,41 @@ import React from "react";
 import PropTypes from "prop-types";
 import classnames from "classnames";
 
-const TextFieldGroup = ({
+const SelectListGroup = ({
   onChange,
-  type,
-  placeholder,
   name,
+  placeholder,
   value,
-  disabled,
   label,
   error,
-  info
+  info,
+  options
 }) => {
   return (
     <div className="form-group">
-      <input
+      <textarea
         onChange={onChange}
-        type={type}
         className={classnames("form-control form-control-lg", {
           "is-invalid": error
         })}
-        placeholder={placeholder}
         name={name}
         value={value}
-        disabled={disabled}
+        placeholder={placeholder}
       />
       {error && <div className="text-danger">{error}</div>}
     </div>
   );
 };
 
-TextFieldGroup.propTypes = {
+SelectListGroup.propTypes = {
   name: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired,
   loginInfo: PropTypes.string,
   error: PropTypes.string,
   onChange: PropTypes.func,
-  disabled: PropTypes.string,
-  info: PropTypes.string
+  info: PropTypes.string,
+  placeholder: PropTypes.string.isRequired,
+  options: PropTypes.array.isRequired
 };
-TextFieldGroup.defaults = {
-  type: "text"
-};
-export default TextFieldGroup;
+
+export default SelectListGroup;
