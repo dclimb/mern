@@ -5,6 +5,8 @@ import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {registerUser} from '../../actions/authActions'
 
+
+
 class Signin extends React.Component {
 
   constructor(){
@@ -18,6 +20,12 @@ class Signin extends React.Component {
     };
     this.onChange =  this.onChange.bind(this);
     this.onSubmit =  this.onSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    if(this.props.auth.isAuthenticated){
+      this.props.history.push('/dashboard')
+    }
   }
 
   componentWillReceiveProps(newProps){
@@ -119,7 +127,9 @@ class Signin extends React.Component {
 Signin.propTypes= {
   registerUser: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
 }
+
 const mapStateToProps = (state) =>({
   auth: state.auth,
   errors: state.errors

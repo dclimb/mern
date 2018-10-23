@@ -39,11 +39,15 @@ router.post('/signin', (req,res,next) => {
     return res.status(400).json(errors)
   };
 
+  //CHECK IF EMAIL ALREADY EXISTS
+
   User.find({email: req.body.email}, (err, data) =>{
     if (data.length > 0){
       errors.email = 'This email already exists';
       res.status(400).json(errors)
     } else {
+
+      //ENCRIPT PASSWORD
       bcrypt.hash(req.body.password, 10, (err,hash) =>{
         if (err) {
           res.status(500).json({
@@ -80,45 +84,51 @@ router.post('/signin', (req,res,next) => {
 //@desc log in
 //@access Public
 
-router.post('/login', (req,res,next) => {
+router.post('/login', (req, res) => {
+  const { errors, isValid } = validateLoginInput(req.body);
 
-  const {errors, isValid} = validateLoginInput(req.body);
+  // Check Validation
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
 
-  if(!isValid) return res.status(400).json(errors);
+  const email = req.body.email;
+  const password = req.body.password;
 
-  User.findOne({email: req.body.email}, (err, user) =>{
-    if(user == null){
-      errors.email = 'Email not found';
-      res.status(500).json(errors);
-    } else {
-      // return res.json(user)
-      bcrypt.compare(req.body.password, user.password, (err, data) =>{
-        if (!data) {
-          errors.password = 'Incorrect password';
-          res.status(401).json(errors);
-        } else {
-          const payload = {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            avatar: user.avatar
-          }
-          jwt.sign(
-            payload,
-            keys.PASSPORT_KEY,
-            {expiresIn:'1h'},
-            (err, token) =>{
-              if (err) { throw(err)};
-              res.status(200).json({
-                message: 'success',
-                token: 'Bearer ' + token
-            })
-          })
-        }
-      })
+  // Find user by email
+  User.findOne({ email }).then(user => {
+    // Check for user
+    if (!user) {
+      errors.email = 'User not found';
+      return res.status(404).json(errors);
     }
-  })
-})
+
+    // Check Password
+    bcrypt.compare(password, user.password).then(isMatch => {
+      if (isMatch) {
+        // User Matched
+        const payload = { id: user.id, name: user.name, avatar: user.avatar }; // Create JWT Payload
+
+        // Sign Token
+        jwt.sign(
+          payload,
+          keys.PASSPORT_KEY,
+          { expiresIn: 3600 },
+          (err, token) => {
+            res.json({
+              success: true,
+              token: 'Bearer ' + token
+            });
+          }
+        );
+      } else {
+        errors.password = 'Password incorrect';
+        return res.status(400).json(errors);
+      }
+    });
+  });
+});
+
 
 //@route get /users/current
 //@desc return current user
