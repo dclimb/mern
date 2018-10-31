@@ -8,11 +8,11 @@ import TextAreaFieldGroup from "./TextAreaFieldGroup";
 import SelectListGroup from "./SelectListGroup";
 import InputGroup from "./InputGroup";
 
-import { setProfile } from "../../actions/profileActions";
+import { setProfile, getProfile } from "../../actions/profileActions";
 
-class CreateProfile extends React.Component {
-  constructor() {
-    super();
+class EditProfile extends React.Component {
+  constructor(props) {
+    super(props);
     this.state = {
       displaySocialInputs: false,
       bio: "",
@@ -32,24 +32,43 @@ class CreateProfile extends React.Component {
     };
   }
 
-  componentDidMount() {
-    console.log(this.state);
-  }
-
   static getDerivedStateFromProps(nextProps, prevState) {
-    console.log(nextProps, prevState);
-    if (nextProps) {
-      return { errors: nextProps.errors };
+    let profile = nextProps.profile.profile;
+
+    //SKILLS ARRAY TO CSV
+
+    if (profile != null && typeof profile.skills == "object") {
+      // console.log(profile.skills);
+      profile.skills = profile.skills.join(",");
+    }
+
+    //ADD ERRORS
+
+    if (nextProps.errors !== prevState.errors && profile != null) {
+      profile.errors = nextProps.errors;
+
+      return profile;
+    }
+
+    if (nextProps.errors == {}) {
+      profile.errors = {};
+      return profile;
+    }
+    //REASSIGN PREVSTATE IF USER REFRESH PAGE (PREVENT PROFILE FROM BEING null)
+
+    if (prevState.status.length > 0) {
+      return prevState;
+    }
+
+    if (profile) {
+      return profile;
     }
     return null;
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   this.setState({ errors: nextProps.errors });
-  // }
-
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
+    // console.log(this.state);
   };
 
   onSubmit = e => {
@@ -138,7 +157,7 @@ class CreateProfile extends React.Component {
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
-              <h1 className="lead text-center">Create your profile</h1>
+              <h1 className="lead text-center">Edit your profile</h1>
               <form onSubmit={this.onSubmit}>
                 <TextFieldGroup
                   name="handle"
@@ -218,16 +237,20 @@ class CreateProfile extends React.Component {
   }
 }
 
-CreateProfile.propTypes = {
-  auth: PropTypes.object.isRequired
+EditProfile.propTypes = {
+  auth: PropTypes.object.isRequired,
+  profile: PropTypes.object.isRequired,
+  getProfile: PropTypes.func.isRequired,
+  setProfile: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  errors: state.errors
+  errors: state.errors,
+  profile: state.profile
 });
 
 export default connect(
   mapStateToProps,
-  { setProfile }
-)(withRouter(CreateProfile));
+  { setProfile, getProfile }
+)(withRouter(EditProfile));

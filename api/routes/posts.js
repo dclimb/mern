@@ -23,7 +23,7 @@ router.get("/", (req, res, next) => {
 
 router.get("/all", (req, res, next) => {
   Post.find()
-    .populate("user")
+    .populate("user", "name avatar")
     .sort({ date: -1 })
     .then(post => {
       res.status(200).json(post);
@@ -50,8 +50,9 @@ router.get("/:postId", (req, res, next) => {
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
-  (req, res, next) => {
+  (req, res) => {
     const { errors, isValid } = validatePostInput(req.body);
+    console.log(req.body);
     if (!isValid) return res.status(400).json(errors);
 
     const newPost = new Post({
@@ -62,7 +63,6 @@ router.post(
     });
 
     newPost.save((err, data) => {
-      if (err) return res.status(400).json(err);
       res.status(201).json(data);
     });
   }
@@ -149,7 +149,7 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     const { errors, isValid } = validateCommentInput(req.body);
-    if (!isValid) return res.status(200).json(errors);
+    if (!isValid) return res.status(400).json(errors);
 
     Post.findById(req.params.postId).then(post => {
       //CREATE COMMENT
@@ -158,7 +158,7 @@ router.post(
         user: req.user.id,
         name: req.user.name,
         avatar: req.user.avatar,
-        text: req.body.text
+        commentText: req.body.commentText
       };
 
       //ADD COMMENT AND SAVE

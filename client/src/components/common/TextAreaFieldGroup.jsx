@@ -21,7 +21,6 @@ const TextAreaFieldGroup = ({
         placeholder={placeholder}
         name={name}
         value={value}
-        placeholder={placeholder}
       />
       {error && <div className="text-danger">{error}</div>}
     </div>

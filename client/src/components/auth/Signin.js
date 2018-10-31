@@ -27,6 +27,9 @@ class Signin extends React.Component {
     }
   }
 
+  // getDerivedStateFromProps(nextProps, prevState) {
+  //   console.log(nextProps);
+  // }
   componentWillReceiveProps(newProps) {
     if (newProps.errors) {
       this.setState({ errors: newProps.errors });

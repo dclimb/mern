@@ -1,19 +1,17 @@
-const Validator = require('validator');
-const isEmpty = require('./isEmpty');
+const Validator = require("validator");
+const isEmpty = require("./isEmpty");
 
-module.exports = (value) => {
+module.exports = value => {
   let errors = {};
 
-  value.text = isEmpty(value.text) ? '' : value.text;
+  value.text = isEmpty(value.text) ? "" : value.text;
 
-
-  if(Validator.isEmpty(value.text)){
-    errors.text = 'Text field is request'
+  if (Validator.isEmpty(value.text)) {
+    errors.text = "Text field is requested";
   }
 
   return {
     errors,
     isValid: isEmpty(errors)
-  }
-
+  };
 };

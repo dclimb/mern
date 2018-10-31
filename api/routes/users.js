@@ -119,6 +119,21 @@ router.post("/login", (req, res) => {
   });
 });
 
+//@route  - DELETE /users/
+//@desc   - deletes current user
+//@access - Private
+
+router.delete(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.findByIdAndRemove(req.user.id, (err, data) => {
+      if (err) return res.status(500).json(err);
+      res.status(202).json({ message: "deleted" });
+    });
+  }
+);
+
 //@route get /users/current
 //@desc return current user
 //@access Private

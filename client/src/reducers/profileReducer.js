@@ -1,18 +1,27 @@
 import {
   GET_PROFILE,
+  GET_PROFILES,
   PROFILE_LOADING,
-  CLEAR_CURRENT_PROFILE
+  CLEAR_CURRENT_PROFILE,
+  SET_PROFILE,
+  EDIT_EXPERIENCE,
+  EDIT_EDUCATION
 } from "../actions/types";
 import { getProfile, setProfileLoading } from "../actions/profileActions";
 
 const initialState = {
-  profile: {},
+  profile: null,
   profiles: null,
   loading: false
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case SET_PROFILE:
+      return {
+        ...state,
+        profile: action.payload
+      };
     case GET_PROFILE:
       return {
         ...state,
@@ -24,12 +33,22 @@ export default (state = initialState, action) => {
         ...state,
         loading: true
       };
-    default:
     case CLEAR_CURRENT_PROFILE:
       return {
         ...state,
-        profile: null
+        profile: {}
       };
+    case GET_PROFILES:
+      return {
+        ...state,
+        loading: false,
+        profiles: action.payload
+      };
+
+      break;
+
+      break;
+    default:
       return state;
   }
 };
