@@ -8,11 +8,9 @@ import { deleteExperience } from "../../actions/profileActions";
 class Experience extends React.Component {
   constructor(props) {
     super(props);
-    console.log(this.props);
   }
 
   onDelete = e => {
-    console.log(e.target.value);
     this.props.deleteExperience(e.target.value);
   };
   render() {
@@ -38,7 +36,6 @@ class Experience extends React.Component {
         </th>
       </tr>
     ));
-    console.log(this.props.experience);
     return (
       <div className="experience-container mt-10">
         <h1>Experience</h1>

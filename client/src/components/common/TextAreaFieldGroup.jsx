@@ -34,8 +34,7 @@ TextAreaFieldGroup.propTypes = {
   loginInfo: PropTypes.string,
   error: PropTypes.string,
   onChange: PropTypes.func,
-  info: PropTypes.string,
-  placeholder: PropTypes.string.isRequired
+  info: PropTypes.string
 };
 
 export default TextAreaFieldGroup;

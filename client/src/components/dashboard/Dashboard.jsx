@@ -19,7 +19,6 @@ class Dashboard extends React.Component {
     const { loading, profile } = this.props.profile;
     let dashboardContent;
     if (profile === null || profile.loading) {
-      console.log(profile);
       dashboardContent = <h1>Loading</h1>;
     } else {
       if (Object.keys(profile).length > 0) {

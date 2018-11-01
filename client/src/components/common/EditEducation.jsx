@@ -30,14 +30,10 @@ class EditEducation extends React.Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    console.log("prev", prevState);
-    console.log("next", nextProps);
-    console.log(isEmpty(nextProps.errors));
-
     if (
       (!isEmpty(nextProps.errors) || !isEmpty(nextProps.from)) &&
-      prevState.current == false &&
-      prevState.to == ""
+      prevState.current === false &&
+      prevState.to === ""
     ) {
       prevState.errors = nextProps.errors;
       prevState.errors.to = "Form field required";
@@ -53,19 +49,7 @@ class EditEducation extends React.Component {
 
   onCheck = e => {
     const current = !this.state.current;
-    // if (current) {
-    //   const d = new Date();
-    //   const month =
-    //     d.getMonth().toString().length == 1 ? "0" + d.getMonth() : d.getMonth();
-    //   const day =
-    //     d.getDay().toString().length == 1 ? "0" + d.getDay() : d.getDay();
-    //   console.log(day);
-    //   const to = d.getFullYear() + "-" + month + "-" + day;
-    //   console.log(to);
-    //   this.setState({ to, current });
-    // } else {
     this.setState({ current });
-    // }
   };
 
   onSubmit = e => {
@@ -76,7 +60,6 @@ class EditEducation extends React.Component {
 
   render() {
     const { errors } = this.props;
-    console.log(this.props);
     return (
       <div className="edit-experience">
         <div className="container">

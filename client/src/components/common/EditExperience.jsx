@@ -28,19 +28,13 @@ class EditExperience extends React.Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    console.log("prev", prevState);
-    console.log("next", nextProps);
-    console.log(isEmpty(nextProps.errors));
-
     if (
       (!isEmpty(nextProps.errors) || !isEmpty(nextProps.from)) &&
-      prevState.current == false &&
-      prevState.to == ""
+      prevState.current === false &&
+      prevState.to === ""
     ) {
       prevState.errors = nextProps.errors;
       prevState.errors.to = "Form field required";
-      console.log(nextProps.errors);
-      console.log(prevState);
 
       return prevState;
     }
@@ -49,7 +43,6 @@ class EditExperience extends React.Component {
 
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
-    console.log(this.state);
   };
 
   onCheck = e => {
@@ -57,12 +50,12 @@ class EditExperience extends React.Component {
     if (current) {
       const d = new Date();
       const month =
-        d.getMonth().toString().length == 1 ? "0" + d.getMonth() : d.getMonth();
+        d.getMonth().toString().length === 1
+          ? "0" + d.getMonth()
+          : d.getMonth();
       const day =
-        d.getDay().toString().length == 1 ? "0" + d.getDay() : d.getDay();
-      console.log(day);
+        d.getDay().toString().length === 1 ? "0" + d.getDay() : d.getDay();
       const to = d.getFullYear() + "-" + month + "-" + day;
-      console.log(to);
       this.setState({ to, current });
     } else {
       this.setState({ current });

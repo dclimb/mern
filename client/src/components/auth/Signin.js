@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import classnames from "classnames";
+// import classnames from "classnames";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { registerUser } from "../../actions/authActions";
@@ -28,7 +28,7 @@ class Signin extends React.Component {
   }
 
   // getDerivedStateFromProps(nextProps, prevState) {
-  //   console.log(nextProps);
+
   // }
   componentWillReceiveProps(newProps) {
     if (newProps.errors) {
@@ -49,13 +49,13 @@ class Signin extends React.Component {
       password: this.state.password,
       password2: this.state.password2
     };
-    console.log(this.props);
+
     this.props.registerUser(newUser, this.props.history);
   }
 
   render() {
     const { errors } = this.state;
-    const { user } = this.props.auth;
+    // const { user } = this.props.auth;
 
     return (
       <div className="register">

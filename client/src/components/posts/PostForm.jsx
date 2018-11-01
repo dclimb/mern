@@ -10,7 +10,7 @@ class PostForm extends React.Component {
   constructor() {
     super();
     this.state = {
-      commentText: "",
+      text: "",
       errors: {}
     };
   }
@@ -24,20 +24,20 @@ class PostForm extends React.Component {
     e.preventDefault();
 
     const newPost = {
-      commentText: this.state.commentText,
+      text: this.state.text,
       user: this.props.auth.user.name,
       avatar: ""
     };
     this.setState({
-      commentText: ""
+      text: ""
     });
 
     this.props.addPost(newPost);
   };
 
   onChange = e => {
-    const commentText = e.target.value;
-    this.setState({ commentText });
+    const text = e.target.value;
+    this.setState({ text });
   };
   render() {
     const { errors } = this.state;
@@ -49,8 +49,8 @@ class PostForm extends React.Component {
             <form onSubmit={this.onSubmit}>
               <div className="form-group">
                 <TextAreaFieldGroup
-                  name="commentText"
-                  value={this.state.commentText}
+                  name="text"
+                  value={this.state.text}
                   placeholder="Write a post"
                   error={this.state.errors.text}
                   onChange={this.onChange}

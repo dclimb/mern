@@ -79,12 +79,14 @@ router.post(
     Post.findById(req.params.postId)
       .then(post => {
         if (post.likes.indexOf(req.user.id) >= 0) {
-          res.json({ message: "You already liked this post", post });
+          res
+            .status(400)
+            .json({ message: "You already liked this post", post });
         } else {
-          post.likes.push(req.user.id);
+          post.likes.push(req.user);
           post.save((err, likes) => {
             if (err) res.status(400).json(err);
-            res.json({ message: "You like this post" });
+            res.json({ message: "You like this post", likes });
           });
         }
       })
@@ -160,6 +162,7 @@ router.post(
         avatar: req.user.avatar,
         commentText: req.body.commentText
       };
+      console.log(newComment);
 
       //ADD COMMENT AND SAVE
 
@@ -192,14 +195,15 @@ router.delete(
 
         //CHECK THE ID MATCH USER <=> COMMENT.USER
 
-        if (
-          post.comments.filter(
-            it => it.id.toString() == req.params.commentId
-          )[0].user == req.user.id ||
-          post.user.toString() == req.user.id
-        ) {
+        const comment = post.comments.filter(
+          com => com._id == req.params.commentId
+        );
+
+        console.log(comment[0].user.toString() == req.user.id);
+
+        if (comment[0].user.toString() == req.user.id) {
           const commentIndex = post.comments
-            .map(item => item._id)
+            .map(item => item._id.toString())
             .indexOf(req.params.commentId);
           post.comments.splice(commentIndex, 1);
           post.save((err, data) => {

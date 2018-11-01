@@ -27,7 +27,6 @@ const TextFieldGroup = ({
         name={name}
         value={value}
         disabled={disabled}
-        type={type}
       />
       {error && <div className="text-danger">{error}</div>}
     </div>

@@ -1,17 +1,17 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const PostSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
+    ref: "User"
   },
   text: {
     type: String,
     require: true
   },
-  name:{
-    type: String,
+  name: {
+    type: String
   },
   avatar: {
     type: String
@@ -19,21 +19,21 @@ const PostSchema = new Schema({
   likes: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'User'
+      ref: "User"
     }
   ],
   comments: [
     {
       user: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: "User"
       },
-      text: {
+      commentText: {
         type: String,
         require: true
       },
-      name:{
-        type: String,
+      name: {
+        type: String
       },
       avatar: {
         type: String
@@ -42,13 +42,12 @@ const PostSchema = new Schema({
         type: Date,
         default: Date.now
       }
-
     }
   ],
   date: {
     type: Date,
     default: Date.now
   }
-})
+});
 
-module.exports = mongoose.model('Post', PostSchema)
+module.exports = mongoose.model("Post", PostSchema);

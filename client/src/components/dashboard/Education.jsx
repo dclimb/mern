@@ -8,11 +8,9 @@ import { deleteEducation } from "../../actions/profileActions";
 class Education extends React.Component {
   constructor(props) {
     super(props);
-    console.log(this.props);
   }
 
   onDelete = e => {
-    console.log(e.target.value);
     this.props.deleteEducation(e.target.value);
   };
   render() {
@@ -38,7 +36,7 @@ class Education extends React.Component {
         </th>
       </tr>
     ));
-    console.log(this.props.profile.profile.education);
+
     return (
       <div className="education-container mt-10">
         <h1>Education</h1>

@@ -15,15 +15,12 @@ export const getProfile = () => dispatch => {
   axios
     .get("/profiles")
     .then(res => {
-      // console.log("then");
-
       dispatch({
         type: GET_PROFILE,
         payload: res.data
       });
     })
     .catch(err => {
-      // console.log("error");
       dispatch({
         type: GET_PROFILE,
         payload: {}
@@ -83,15 +80,12 @@ export const editEducation = (newEducation, history) => dispatch => {
     .post("/profiles/education", newEducation)
     .then(res => {
       history.push("/dashboard");
-      console.log(res.data);
     })
     .catch(err => {
-      console.log("error education");
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
       });
-      console.log(err.response.data);
     });
 };
 
@@ -107,12 +101,10 @@ export const deleteExperience = id => dispatch => {
       });
     })
     .catch(err => {
-      console.log("delet catch");
       dispatch({
         type: GET_ERRORS,
         payload: err.response
       });
-      console.log(err.response);
     });
 };
 
@@ -128,12 +120,10 @@ export const deleteEducation = id => dispatch => {
       });
     })
     .catch(err => {
-      console.log("delet catch");
       dispatch({
         type: GET_ERRORS,
         payload: err.response
       });
-      console.log(err.response);
     });
 };
 
@@ -143,7 +133,6 @@ export const getProfiles = () => dispatch => {
   axios
     .get("/profiles/all")
     .then(res => {
-      console.log(res.data);
       dispatch({ type: setProfileLoading });
       dispatch({
         type: GET_PROFILES,
@@ -165,7 +154,6 @@ export const getProfileByHandle = handle => dispatch => {
   axios
     .get(`/profiles/handle/${handle}`)
     .then(res => {
-      console.log(res.data);
       dispatch({
         type: GET_PROFILE,
         payload: res.data

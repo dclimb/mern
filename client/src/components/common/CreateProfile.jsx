@@ -32,12 +32,9 @@ class CreateProfile extends React.Component {
     };
   }
 
-  componentDidMount() {
-    console.log(this.state);
-  }
+  componentDidMount() {}
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    console.log(nextProps, prevState);
     if (nextProps) {
       return { errors: nextProps.errors };
     }

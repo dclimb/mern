@@ -33,11 +33,6 @@ class Login extends React.Component {
     if (nextProps.auth.isAuthenticated) {
       this.props.history.push("/dashboard");
     }
-    console.log(
-      nextProps.errors,
-      nextProps.auth,
-      nextProps.auth.isAuthenticated
-    );
   }
 
   onChange(e) {
@@ -52,7 +47,6 @@ class Login extends React.Component {
       password: this.state.password
     };
     this.props.loginUser(loginInfo, this.props.history);
-    console.log(this.props.errors);
   }
 
   render() {

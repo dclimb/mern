@@ -1,9 +1,9 @@
 import React from "react";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import classnames from "classnames";
+// import classnames from "classnames";
 
 import { logoutUser } from "../../actions/authActions";
 
@@ -11,7 +11,6 @@ class Navbar extends React.Component {
   onLogout = e => {
     e.preventDefault();
     this.props.logoutUser(this.props.history);
-    console.log(this.props.auth, this.props.auth.isAuthenticated);
   };
 
   render() {

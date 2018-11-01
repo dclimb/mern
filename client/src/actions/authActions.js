@@ -25,7 +25,6 @@ export const loginUser = loginInfo => dispatch => {
   axios
     .post("/users/login", loginInfo)
     .then(res => {
-      console.log("called");
       //GET TOKEN
       const { token } = res.data;
       //SAVE TOKEN TO LOCAL STORAGE

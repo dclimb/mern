@@ -38,7 +38,6 @@ class EditProfile extends React.Component {
     //SKILLS ARRAY TO CSV
 
     if (profile != null && typeof profile.skills == "object") {
-      // console.log(profile.skills);
       profile.skills = profile.skills.join(",");
     }
 
@@ -68,7 +67,6 @@ class EditProfile extends React.Component {
 
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
-    // console.log(this.state);
   };
 
   onSubmit = e => {
